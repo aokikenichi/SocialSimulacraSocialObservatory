@@ -4,6 +4,223 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>社会シミュラクラ観測所</title>
+  <style>
+    :root{
+      --bg:#f6f3ee;
+      --paper:#fffaf2;
+      --ink:#222222;
+      --muted:#6c665e;
+      --line:#ddd2c3;
+      --accent:#2f5f6f;
+      --accent2:#b56b3c;
+      --accent3:#6c8f6b;
+      --danger:#a04444;
+      --shadow: 0 18px 45px rgba(51, 38, 22, .10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","YuGothic","Noto Sans JP",Meiryo,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(181,107,60,.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(47,95,111,.16), transparent 30%),
+        linear-gradient(180deg,#f8f4ec 0%,#efe8db 100%);
+      line-height:1.78;
+    }
+    a{color:var(--accent); text-decoration-thickness: .08em; text-underline-offset: .18em;}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 64px;}
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:32px;
+      background:linear-gradient(135deg,rgba(255,250,242,.96),rgba(255,246,232,.88));
+      box-shadow:var(--shadow);
+      padding:42px 34px;
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      right:-120px; top:-140px;
+      width:360px; height:360px;
+      border-radius:50%;
+      background:repeating-linear-gradient(45deg, rgba(47,95,111,.12) 0 8px, transparent 8px 18px);
+      transform:rotate(12deg);
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:13px; font-weight:700; letter-spacing:.04em;
+      color:#fff; background:var(--accent);
+      border-radius:999px; padding:7px 13px;
+      position:relative; z-index:1;
+    }
+    h1{
+      font-size:clamp(29px,5vw,56px);
+      line-height:1.16;
+      margin:20px 0 14px;
+      letter-spacing:-.04em;
+      position:relative; z-index:1;
+    }
+    .lead{
+      max-width:850px; font-size:17px; color:#403b35; position:relative; z-index:1;
+    }
+    .notice{
+      margin-top:20px;
+      border-left:5px solid var(--accent2);
+      background:#fff5e6;
+      padding:14px 16px;
+      border-radius:14px;
+      font-weight:650;
+      position:relative; z-index:1;
+    }
+    .grid{display:grid; gap:18px;}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+    @media (max-width: 860px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.hero{padding:30px 22px}}
+    .card{
+      background:rgba(255,250,242,.94);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 10px 28px rgba(51,38,22,.06);
+      padding:22px;
+    }
+    section{margin-top:28px;}
+    h2{
+      font-size:28px;
+      line-height:1.35;
+      margin:0 0 14px;
+      letter-spacing:-.03em;
+    }
+    h3{font-size:20px; margin:16px 0 8px}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .tabs{
+      display:flex; flex-wrap:wrap; gap:9px;
+      margin:22px 0 18px;
+      position:sticky; top:0; z-index:10;
+      background:rgba(246,243,238,.86);
+      backdrop-filter: blur(10px);
+      padding:12px 0;
+    }
+    button.tab, button.pill, select{
+      border:1px solid var(--line);
+      background:#fffaf2;
+      color:var(--ink);
+      border-radius:999px;
+      padding:10px 15px;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow:0 4px 12px rgba(51,38,22,.05);
+    }
+    button.tab.active, button.pill.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+    .panel{display:none}
+    .panel.active{display:block}
+    table{
+      width:100%; border-collapse:separate; border-spacing:0; overflow:hidden;
+      border:1px solid var(--line); border-radius:18px; background:#fffdf8;
+      font-size:14px;
+    }
+    th,td{padding:12px 13px; border-bottom:1px solid var(--line); vertical-align:top}
+    th{background:#efe5d6; text-align:left; font-weight:800}
+    tr:last-child td{border-bottom:none}
+    .num{text-align:right; font-variant-numeric:tabular-nums}
+    .kpi{
+      display:flex; flex-direction:column; gap:8px; min-height:126px;
+      border-left:5px solid var(--accent);
+    }
+    .kpi .value{font-size:34px; font-weight:900; letter-spacing:-.05em}
+    .tag{
+      display:inline-flex; align-items:center;
+      padding:4px 9px; border-radius:999px;
+      background:#efe5d6; color:#51493f;
+      font-size:12px; font-weight:800;
+      margin:3px 4px 3px 0;
+      white-space:nowrap;
+    }
+    .tag.warn{background:#f7dfd2;color:#7d3827}
+    .tag.cool{background:#dfebe7;color:#235449}
+    .tag.blue{background:#dfeaf0;color:#244f5c}
+    .intervention{
+      border-top:6px solid var(--accent);
+      min-height:230px;
+    }
+    .intervention:nth-child(2){border-color:var(--accent2)}
+    .intervention:nth-child(3){border-color:var(--accent3)}
+    .intervention:nth-child(4){border-color:var(--danger)}
+    .barrow{
+      display:grid; grid-template-columns:110px 1fr 46px; gap:10px;
+      align-items:center; margin:10px 0;
+    }
+    .barbg{height:13px; background:#e7ded0; border-radius:999px; overflow:hidden}
+    .bar{height:100%; border-radius:999px; background:linear-gradient(90deg,var(--accent),var(--accent2));}
+    .svgbox{
+      width:100%; min-height:290px; border:1px dashed #cfc2b1;
+      border-radius:18px; background:#fffdf8; padding:12px; overflow:auto;
+    }
+    .persona-toolbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px}
+    .persona-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+    @media (max-width: 860px){.persona-grid{grid-template-columns:1fr}}
+    details.persona{
+      background:#fffdf8; border:1px solid var(--line); border-radius:20px;
+      padding:0; overflow:hidden; box-shadow:0 7px 18px rgba(51,38,22,.05);
+    }
+    details.persona summary{
+      list-style:none; cursor:pointer; padding:18px 20px;
+      display:flex; justify-content:space-between; gap:14px; align-items:center;
+      font-weight:900;
+    }
+    details.persona summary::-webkit-details-marker{display:none}
+    .persona-body{padding:0 20px 18px; border-top:1px solid var(--line)}
+    .quote{
+      background:#f5ebdc; border-left:4px solid var(--accent2);
+      padding:12px 14px; border-radius:12px; margin:12px 0;
+    }
+    .split{
+      display:grid; grid-template-columns:1fr 1fr; gap:14px;
+    }
+    @media (max-width: 860px){.split{grid-template-columns:1fr}}
+    .noise-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+    @media (max-width: 860px){.noise-list{grid-template-columns:1fr}}
+    .noise{
+      padding:16px 16px 16px 46px; border:1px solid var(--line); border-radius:18px;
+      background:#fffdf8; position:relative;
+    }
+    .noise:before{
+      content:"！"; position:absolute; left:15px; top:15px;
+      width:22px; height:22px; border-radius:50%;
+      display:grid; place-items:center; background:var(--accent2); color:white; font-weight:900;
+      font-size:13px;
+    }
+    .footer{
+      margin-top:28px; color:var(--muted); font-size:13px;
+      border-top:1px solid var(--line); padding-top:18px;
+    }
+    .source-list li{margin:8px 0}
+    .article-summary{
+      font-size:17px; background:linear-gradient(135deg,#fffdf8,#f7ead7);
+      border:1px solid var(--line); border-radius:22px; padding:22px;
+    }
+    .screenmock{
+      display:grid; grid-template-columns:220px 1fr; gap:12px;
+      border:1px solid var(--line); border-radius:24px; padding:14px;
+      background:#fffdf8;
+    }
+    .screenmock .side{background:#efe5d6;border-radius:18px;padding:14px}
+    .screenmock .main{display:grid; gap:12px}
+    .screenmock .block{background:#f8f1e6;border-radius:18px;padding:16px;border:1px solid #e2d5c4}
+    @media (max-width: 700px){.screenmock{grid-template-columns:1fr}}
+    .print-note{display:none}
+    @media print{
+      body{background:white}
+      .tabs,.persona-toolbar{display:none}
+      .panel{display:block!important}
+      .card,.hero{box-shadow:none}
+      .print-note{display:block}
+    }
+  </style>
 </head>
 <body>
 - <a href="社会シミュラクラ観測所｜観測ログ No.001 物価高対策としての消費税を観測する" target="_blank">social_simulacra_consumption_tax_dashboard.html</a>
