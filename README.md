@@ -1,0 +1,2 @@
+# SocialSimulacraSocialObservatory
+社会シミュラクラ観測所
