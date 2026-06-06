@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>社会シミュラクラ観測ログ No.003｜週休3日制</title>
+  <style>
+    :root{
+      --bg:#f6f1e8;
+      --paper:#fffaf0;
+      --ink:#1f2430;
+      --muted:#6b6258;
+      --line:#d8cbb8;
+      --accent:#9b2f1f;
+      --accent2:#1d5d63;
+      --accent3:#7a5c12;
+      --soft:#efe2cf;
+      --soft2:#e6efe9;
+      --warn:#f4d6ca;
+      --shadow:0 10px 30px rgba(35,30,20,.12);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      --serif: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(155,47,31,.10), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(29,93,99,.12), transparent 26%),
+        linear-gradient(180deg,#f8f0e3 0%,#f6f1e8 55%,#efe4d2 100%);
+      font-family:var(--sans);
+      line-height:1.75;
+    }
+    a{color:var(--accent2)}
+    .wrap{width:min(1180px,92vw); margin:0 auto;}
+    header.hero{
+      padding:48px 0 32px;
+      position:relative;
+      overflow:hidden;
+    }
+    .label{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      padding:.35rem .72rem;
+      border:1px solid rgba(31,36,48,.18);
+      border-radius:999px;
+      background:rgba(255,250,240,.72);
+      backdrop-filter: blur(8px);
+      color:var(--muted);
+      font-size:.88rem;
+      letter-spacing:.04em;
+    }
+    .label::before{content:""; width:.55rem; height:.55rem; border-radius:50%; background:var(--accent); box-shadow:0 0 0 5px rgba(155,47,31,.12)}
+    h1{
+      font-family:var(--serif);
+      font-size:clamp(2.25rem,5vw,5.3rem);
+      line-height:1.06;
+      letter-spacing:-.04em;
+      margin:18px 0 14px;
+    }
+    .subtitle{
+      font-size:clamp(1rem,2vw,1.35rem);
+      max-width:860px;
+      color:#403b35;
+      margin:0 0 22px;
+    }
+    .notice{
+      border-left:6px solid var(--accent);
+      background:rgba(255,250,240,.82);
+      padding:16px 18px;
+      border-radius:0 var(--radius) var(--radius) 0;
+      box-shadow:var(--shadow);
+      max-width:960px;
+    }
+    .notice strong{color:var(--accent)}
+    .grid{display:grid; gap:18px}
+    .cards{grid-template-columns:repeat(5,minmax(0,1fr)); margin:24px 0 8px}
+    .card{
+      background:rgba(255,250,240,.86);
+      border:1px solid rgba(216,203,184,.9);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .card h3{margin:0 0 6px; font-size:1rem; line-height:1.35}
+    .card p{margin:0; color:var(--muted); font-size:.92rem}
+    .kpi{font-family:var(--mono); font-size:1.75rem; font-weight:800; color:var(--accent2); line-height:1.2}
+    nav.tabs{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(246,241,232,.88);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(216,203,184,.9);
+      padding:10px 0;
+    }
+    .tabbar{display:flex; gap:8px; overflow:auto; padding-bottom:2px}
+    .tabbar button{
+      border:1px solid rgba(31,36,48,.16);
+      background:rgba(255,250,240,.78);
+      color:#312b26;
+      border-radius:999px;
+      padding:9px 14px;
+      white-space:nowrap;
+      cursor:pointer;
+      font-weight:700;
+      transition:.18s ease;
+    }
+    .tabbar button:hover{transform:translateY(-1px); box-shadow:0 6px 14px rgba(35,30,20,.08)}
+    .tabbar button.active{background:var(--ink); color:#fff; border-color:var(--ink)}
+    main{padding:26px 0 64px}
+    section.panel{display:none; animation:fade .22s ease}
+    section.panel.active{display:block}
+    @keyframes fade{from{opacity:.2; transform:translateY(4px)}to{opacity:1; transform:none}}
+    h2{
+      font-family:var(--serif);
+      font-size:clamp(1.75rem,3vw,2.7rem);
+      letter-spacing:-.03em;
+      margin:12px 0 16px;
+      border-bottom:2px solid var(--line);
+      padding-bottom:8px;
+    }
+    h3{font-size:1.25rem; margin:24px 0 10px}
+    .two{grid-template-columns:1.1fr .9fr}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .five{grid-template-columns:repeat(5,minmax(0,1fr))}
+    .box{
+      background:rgba(255,250,240,.84);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    table{width:100%; border-collapse:collapse; background:rgba(255,250,240,.58); overflow:hidden; border-radius:14px; font-size:.95rem}
+    th,td{border-bottom:1px solid rgba(216,203,184,.9); padding:10px 11px; vertical-align:top}
+    th{background:#eadcc6; text-align:left; font-weight:800; white-space:nowrap}
+    tr:last-child td{border-bottom:none}
+    td.num, th.num{text-align:right; font-variant-numeric:tabular-nums}
+    .small{font-size:.88rem; color:var(--muted)}
+    .pill{display:inline-block; border-radius:999px; padding:.18rem .55rem; background:var(--soft); border:1px solid var(--line); font-size:.82rem; margin:.12rem .12rem .12rem 0}
+    .score-table td:nth-child(n+2):not(:last-child), .score-table th:nth-child(n+2):not(:last-child){text-align:right; font-variant-numeric:tabular-nums}
+    .barrow{display:grid; grid-template-columns:150px 1fr 46px; align-items:center; gap:10px; margin:11px 0}
+    .barlabel{font-weight:700; font-size:.92rem}
+    .bartrack{height:18px; background:#e4d7c2; border-radius:999px; overflow:hidden; border:1px solid rgba(31,36,48,.08)}
+    .bar{height:100%; background:linear-gradient(90deg,var(--accent2),#6c8f54); border-radius:999px}
+    .bar.warn{background:linear-gradient(90deg,var(--accent),#d18a3c)}
+    .barval{font-family:var(--mono); text-align:right}
+    .persona-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px}
+    .persona-card{background:rgba(255,250,240,.86); border:1px solid var(--line); border-radius:16px; padding:15px; box-shadow:0 8px 18px rgba(35,30,20,.08)}
+    .persona-card h3{margin:0 0 6px; display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+    .pid{font-family:var(--mono); color:var(--accent); font-size:.82rem; white-space:nowrap}
+    .persona-meta{color:var(--muted); font-size:.88rem; margin-bottom:8px}
+    .persona-card dl{margin:0; display:grid; grid-template-columns:92px 1fr; gap:4px 8px; font-size:.9rem}
+    .persona-card dt{font-weight:800; color:#51483f}
+    .persona-card dd{margin:0}
+    .logs .persona-card{padding:18px}
+    .logs .persona-card dl{grid-template-columns:132px 1fr; gap:7px 12px}
+    .tag-good{background:#dfeee2}
+    .tag-bad{background:#f0d6c8}
+    .tag-mid{background:#eadfc9}
+    .note-list{display:grid; gap:10px; margin:0; padding-left:1.25rem}
+    .note-list li{background:rgba(255,250,240,.72); border:1px solid rgba(216,203,184,.7); border-radius:12px; padding:8px 10px}
+    .svgwrap{width:100%; overflow:auto; background:#fffaf0; border:1px solid var(--line); border-radius:16px; padding:8px}
+    svg text{font-family:var(--sans)}
+    .footer{padding:28px 0 44px; color:var(--muted); border-top:1px solid var(--line)}
+    .callout{background:var(--soft2); border:1px solid #c5d8cc; border-left:6px solid var(--accent2); border-radius:0 16px 16px 0; padding:16px 18px; margin:16px 0}
+    .warning{background:var(--warn); border-left-color:var(--accent)}
+    .print-note{display:none}
+    @media (max-width:900px){
+      .cards,.two,.three,.five{grid-template-columns:1fr}
+      .barrow{grid-template-columns:120px 1fr 40px}
+      h1{font-size:2.55rem}
+    }
+    @media print{
+      nav.tabs{display:none}
+      section.panel{display:block!important; break-inside:auto}
+      .card,.box,.persona-card{box-shadow:none}
+      .print-note{display:block}
+      body{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="label">社会シミュラクラ観測ログ No.003</div>
+      <h1>週休3日制は、<br>誰の自由になるのか</h1>
+      <p class="subtitle">日本社会を対象に、週休3日制の複数パターンが生む期待・不安・分断・沈黙・副作用を、架空ペルソナで観測するデモ用ダッシュボード。</p>
+      <div class="notice">
+        <strong>注意：</strong>このHTMLは、現実の統計的予測ではありません。架空ペルソナと架空スコアによる思考実験です。数値はすべて「デモ用指標」であり、実測値ではありません。
+      </div>
+      <div class="grid cards">
+        <div class="card"><h3>観測対象</h3><p>日本社会の働く人・企業・家庭・地域</p></div>
+        <div class="card"><h3>ペルソナ</h3><div class="kpi">20</div><p>賛成・反対・沈黙・あとから反応を混在</p></div>
+        <div class="card"><h3>処置</h3><div class="kpi">5</div><p>現状維持、給与減、長時間、副業、選択制</p></div>
+        <div class="card"><h3>時間軸</h3><p>1か月後、半年後、1年後、3年後</p></div>
+        <div class="card"><h3>主な問い</h3><p>制度上の自由と、実際に選べる自由のズレ</p></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="wrap tabbar" role="tablist" aria-label="ダッシュボードタブ">
+      <button class="active" data-tab="overview">全体像</button>
+      <button data-tab="conditions">観測条件・仮定</button>
+      <button data-tab="interventions">処置比較</button>
+      <button data-tab="personas">ペルソナ一覧</button>
+      <button data-tab="logs">ペルソナ別ログ</button>
+      <button data-tab="distribution">反応分布</button>
+      <button data-tab="noise">ズレ・含意</button>
+      <button data-tab="next">次に測ること</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <p class="print-note small">印刷表示では全タブ内容を連続表示します。</p>
+
+    <section id="overview" class="panel active">
+      <h2>1. シミュレーション結果：全体像</h2>
+      <div class="grid two">
+        <div class="box">
+          <h3>処置別・主要指標平均</h3>
+          <p class="small">半年後時点の平均値。すべて架空スコアです。</p>
+          <div class="table-wrap">
+            <table class="score-table" id="scoreTable"></table>
+          </div>
+        </div>
+        <div class="box">
+          <h3>生活改善感ランキング</h3>
+          <p class="small">制度の受容度は、単純な休日数ではなく、収入維持・評価不安・実際に選べる空気に左右される。</p>
+          <div id="improvementBars"></div>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:18px">
+        <div class="box">
+          <h3>期待度 × 不安度マップ</h3>
+          <div class="svgwrap">
+            <svg id="scatter" width="680" height="430" viewBox="0 0 680 430" role="img" aria-label="処置ごとの期待度と不安度の散布図"></svg>
+          </div>
+        </div>
+        <div class="box">
+          <h3>平均値だけでは見えないこと</h3>
+          <div class="callout">
+            <strong>選択制がもっとも良く見える。</strong><br>
+            しかし、制度上「選べる」ことと、職場で実際に「選べる」ことは違う。
+          </div>
+          <ul class="note-list">
+            <li>給与2割減型は、高所得者には余白、低所得者には減収リスクになる。</li>
+            <li>4日×10時間型は、収入維持の魅力がある一方、子育て・介護・健康・安全には重い。</li>
+            <li>副業推奨型は、自律層には成長機会だが、副業困難層には格差として見える。</li>
+            <li>現場職・非正規・中小企業・自営業者は、制度の外側に置かれやすい。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="conditions" class="panel">
+      <h2>2. 観測条件・仮定</h2>
+      <div class="grid two">
+        <div class="box">
+          <h3>観測条件</h3>
+          <table>
+            <tbody>
+              <tr><th>観測対象</th><td>日本社会の働く人、企業、家庭、地域</td></tr>
+              <tr><th>ペルソナ数</th><td>20人</td></tr>
+              <tr><th>比較する処置</th><td>現状維持、給与2割減型、4日×10時間型、副業推奨型、選択制</td></tr>
+              <tr><th>時間軸</th><td>1か月後、半年後、1年後、3年後</td></tr>
+              <tr><th>使用する指標</th><td>期待度、不安度、信頼度、行動変化、反発度、生活改善感</td></tr>
+              <tr><th>注意点</th><td>架空データによる思考実験であり、実測値ではない</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box">
+          <h3>制度設計上の注意</h3>
+          <p>週休3日制、とくに「4日×10時間で給与維持する案」は、単に勤務日を減らせばよいわけではありません。日本の法定労働時間は原則として1日8時間・週40時間であり、設計には変形労働時間制などの制度上の検討が必要です。</p>
+          <p class="small">参考：厚生労働省「選択的週休3日制」紹介ページ。<br><a href="https://part-tanjikan.mhlw.go.jp/tayou/holiday3.html" target="_blank" rel="noreferrer">https://part-tanjikan.mhlw.go.jp/tayou/holiday3.html</a></p>
+        </div>
+      </div>
+      <div class="box" style="margin-top:18px">
+        <h3>社会的前提</h3>
+        <ul class="note-list">
+          <li>子育て・介護層は、時間の余裕を強く求める。</li>
+          <li>低所得層は、休日増よりも収入維持を重視する。</li>
+          <li>管理職は、部下の休みよりも調整負荷を恐れる。</li>
+          <li>中小企業は、人員不足と顧客対応の穴を恐れる。</li>
+          <li>大企業は、採用広報や離職防止の効果を期待する。</li>
+          <li>副業可能な専門職は、自由時間を資産化しやすい。</li>
+          <li>現場職・シフト職は、制度の恩恵から外れやすい。</li>
+        </ul>
+      </div>
+      <div class="box" style="margin-top:18px">
+        <h3>モデル上の前提</h3>
+        <p>ペルソナは、年齢、所得、家族構成、職種、企業規模、裁量の有無、副業可能性、生活時間の制約、制度への信頼感で分けました。各指標は0〜100の架空スコアです。</p>
+        <p>このモデルでは、実際の企業別賃金制度、労使交渉、職務設計、産業別労働需給、法制度の細部までは扱いません。</p>
+      </div>
+    </section>
+
+    <section id="interventions" class="panel">
+      <h2>3. 比較する処置・介入</h2>
+      <div class="box">
+        <table id="interventionTable"></table>
+      </div>
+      <div class="grid five" style="margin-top:18px" id="interventionCards"></div>
+    </section>
+
+    <section id="personas" class="panel">
+      <h2>4. ペルソナ一覧</h2>
+      <div class="box" style="margin-bottom:18px">
+        <p>平均的な人物像だけでなく、賛成派・反対派・無関心層・誤解する人・沈黙する人・あとから反応する人を混ぜています。</p>
+      </div>
+      <div class="persona-grid" id="personaGrid"></div>
+    </section>
+
+    <section id="logs" class="panel logs">
+      <h2>5. ペルソナ別ログ</h2>
+      <div class="box" style="margin-bottom:18px">
+        <p>発言と内心を一致させすぎないようにしています。人は本音を言わないことがあります。沈黙、誤解、諦め、建前も観測対象です。</p>
+      </div>
+      <div class="persona-grid" id="logGrid"></div>
+    </section>
+
+    <section id="distribution" class="panel">
+      <h2>6. 反応の分布</h2>
+      <div class="grid two">
+        <div class="box">
+          <table id="distributionTable"></table>
+        </div>
+        <div class="box">
+          <h3>反応タイプ別人数</h3>
+          <div id="distributionBars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="noise" class="panel">
+      <h2>7. 観測されたズレ・ノイズ</h2>
+      <div class="grid two">
+        <div class="box">
+          <h3>きれいな結論にしないための違和感</h3>
+          <ul class="note-list" id="noiseList"></ul>
+        </div>
+        <div class="box">
+          <h3>事業・政策・組織変革への含意</h3>
+          <div class="callout"><strong>最初にやること：</strong>週休3日制を一律導入するかではなく、誰が何に困っているのかを分ける。</div>
+          <h3>先に届けるべき層</h3>
+          <p><span class="pill">介護・育児・通院</span><span class="pill">離職リスク人材</span><span class="pill">評価不安の若手</span><span class="pill">管理職・シフト職</span></p>
+          <h3>先に解くべき誤解</h3>
+          <ul>
+            <li>週休3日制は、単に休みを増やす制度ではない。</li>
+            <li>給与2割減型は、低所得層には使いにくい。</li>
+            <li>選択制でも、評価不利があれば実質的には選べない。</li>
+          </ul>
+          <h3>事業アイデア化するなら</h3>
+          <p>扱うべき未充足ニーズは、週休3日制そのものではなく、制度導入時の不安と運用負荷です。</p>
+        </div>
+      </div>
+      <div class="box" style="margin-top:18px">
+        <h3>公開してよい仮説</h3>
+        <p>週休3日制の本質は、休日数の問題ではなく、「誰が自由を使えるのか」という社会地図の問題である。同じ制度でも、高所得者には自己投資、子育て層には生活防衛、低所得層には減収リスク、管理職には調整負荷、現場職には疎外感として現れる。必要なのは、平均的な賛否調査ではなく、制度が届く層・届かない層・届いたふりをする層を分けて観測することである。</p>
+      </div>
+    </section>
+
+    <section id="next" class="panel">
+      <h2>8. 次に測るべきこと</h2>
+      <div class="box">
+        <table id="nextTable"></table>
+      </div>
+      <div class="box" style="margin-top:18px">
+        <h3>まとめ：今日の社会地図</h3>
+        <p>週休3日制は、社会に一枚の明るいポスターとして現れる。「休みが増える」「人生に余白が生まれる」「副業や学びが進む」。だが、観測してみると、そのポスターの裏側には細かな亀裂が走っている。給与が減るなら選べない人、10時間勤務では家庭が回らない人、制度の対象外だと感じる現場職、部下の自由を支えるために疲弊する管理職がいる。</p>
+        <p>平均値では、選択制がもっとも受け入れられやすい。しかし重要なのは、制度上の選択肢ではなく、実際に選べる空気と評価の安全性である。週休3日制の最大のズレは、「自由を与える制度」が、条件次第で「自由を使える人だけを可視化する制度」になってしまう点にある。</p>
+        <p>次に測るべき問いは、週休3日制に賛成か反対かではない。誰が使えるのか。誰が使えないのか。使えない人は、なぜ沈黙するのか。そこを観測しなければ、週休3日制は働き方改革ではなく、新しい分断の名前になってしまう。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p><strong>社会シミュラクラ観測所</strong>｜このHTMLは公開記事向けの下書き兼ダッシュボード案です。架空データによる思考実験であり、実測値・予測値ではありません。</p>
+    </div>
+  </footer>
+
+<script>
+const scores = [
+  {name:'現状維持', exp:35, anx:52, trust:44, action:12, react:41, improve:28, comment:'混乱は少ないが、閉塞感が残る'},
+  {name:'給与2割減', exp:48, anx:74, trust:36, action:42, react:66, improve:39, comment:'時間は増えるが、低所得層ほど使えない'},
+  {name:'4日×10時間', exp:62, anx:68, trust:45, action:55, react:53, improve:52, comment:'休日は増えるが、平日の疲労が強い'},
+  {name:'副業推奨', exp:59, anx:61, trust:43, action:63, react:50, improve:50, comment:'自律層には効くが、格差感が出る'},
+  {name:'選択制', exp:76, anx:46, trust:64, action:57, react:31, improve:67, comment:'最も受容されるが、運用設計が難しい'}
+];
+const interventions = [
+  {name:'現状維持：週休2日制', aim:'混乱を避ける', reach:'現行制度で困っていない層、管理職、中小企業', miss:'育児・介護・持病・学習希望層', side:'人材流出、閉塞感、若手離れ'},
+  {name:'介入A：週休3日・給与2割減', aim:'労働時間を減らし、生活時間を増やす', reach:'高所得者、介護・通院層、一部の子育て層', miss:'低所得者、ひとり親、非正規', side:'「休む権利」が「減収の自己責任」になる'},
+  {name:'介入B：週休3日・4日×10時間・給与維持', aim:'収入を維持しつつ休日を増やす', reach:'体力がある若手、集中作業職、一部の専門職', miss:'育児層、介護層、現場職、健康不安層', side:'1日の疲労増、事故リスク、家事育児との衝突'},
+  {name:'介入C：週休3日・1日は副業推奨', aim:'自律的キャリア形成を促す', reach:'IT職、専門職、若手成長層', miss:'副業困難職、低所得層、ケア責任がある層', side:'副業できる人だけが得をする格差'},
+  {name:'介入D：社員の選択制', aim:'個人事情に合わせる', reach:'多様な事情を持つ社員、育児・介護・持病層', miss:'運用力の低い企業、現場職', side:'選んだ人が評価で不利になる不安'}
+];
+const personas = [
+  {id:'P01', name:'佐伯蓮', attr:'24歳・大企業若手社員・独身', stance:'受け手', value:'成長と自由', emotion:'期待', interest:'趣味と学習時間がほしい', type:'すぐ賛成する', outward:'週3日休めるなら、勉強も趣味もできて最高です。', inner:'でも若手のうちに休むと、評価で遅れないか少し怖い。', initial:'期待度が高い。', m1:'資格勉強を始める。', m6:'選択制なら使いたいが、直属上司の反応を見て迷う。', best:'選択制、副業推奨型', bad:'給与2割減型', memo:'若手は自由を望むが、評価不安で沈黙しやすい。'},
+  {id:'P02', name:'田辺美咲', attr:'29歳・非正規掛け持ち', stance:'受け手', value:'収入安定', emotion:'不安', interest:'休みより収入が必要', type:'無関心・沈黙', outward:'週休3日はいいですね。', inner:'それより時給を上げてほしい。休みが増えたら生活できない。', initial:'不安が先に立つ。', m1:'制度の話題から距離を置く。', m6:'正社員向けの制度だと感じ、疎外感が増える。', best:'収入補償付きの選択制', bad:'給与2割減型', memo:'低所得層には「時間の自由」より「収入の安定」が先に来る。'},
+  {id:'P03', name:'森川直子', attr:'36歳・共働き子育て世帯', stance:'受け手', value:'家族時間', emotion:'期待と不信', interest:'子どもの予定に合わせたい', type:'条件付きで賛成する', outward:'子どもの予定に合わせられるなら助かります。', inner:'でも10時間勤務の日は保育園のお迎えが無理。', initial:'期待と警戒が混ざる。', m1:'金曜休みを想像して前向きになる。', m6:'4日×10時間型には強い拒否感。', best:'選択制', bad:'4日×10時間型', memo:'子育て層にとって重要なのは休日数より、毎日の時間の柔軟性。'},
+  {id:'P04', name:'小野寺圭', attr:'39歳・ひとり親', stance:'受け手', value:'生活防衛', emotion:'警戒', interest:'給与減は困る', type:'不安が強い', outward:'制度としては良いと思います。', inner:'給与が減るなら絶対に無理。', initial:'慎重。', m1:'説明会には参加するが申し込まない。', m6:'利用者が高所得層中心だと知り、冷める。', best:'選択制。ただし収入維持が条件', bad:'給与2割減型', memo:'ひとり親には「選べる制度」でも、実質的には選べないことがある。'},
+  {id:'P05', name:'笠井誠', attr:'45歳・課長職', stance:'管理側', value:'現場維持', emotion:'困惑', interest:'調整負荷が増えそう', type:'表向き賛成・内心反対', outward:'会社としては柔軟な働き方を進めるべきです。', inner:'部下がバラバラに休んだら、自分の調整仕事が増える。', initial:'管理負荷への不安。', m1:'シフト表と会議調整に追われる。', m6:'制度そのものより運用ツールを求める。', best:'選択制。ただし業務棚卸しがある場合', bad:'全員一律の副業推奨型', memo:'管理職は反対派ではなく、運用不安派であることが多い。'},
+  {id:'P06', name:'井上千秋', attr:'52歳・介護中の正社員', stance:'受け手', value:'継続就業', emotion:'期待', interest:'親の通院に使いたい', type:'条件付きで賛成する', outward:'親の通院に使えるならありがたいです。', inner:'介護を理由に制度を使うと、昇進から外されないか不安。', initial:'期待。', m1:'通院同行がしやすくなる。', m6:'上司の理解がある職場なら満足度が上がる。', best:'選択制', bad:'4日×10時間型', memo:'介護層には、休みの量より「使っても不利にならない安心」が重要。'},
+  {id:'P07', name:'石原舞', attr:'31歳・看護師', stance:'現場職', value:'公平感', emotion:'疎外感', interest:'自分たちは対象外では', type:'あとから効いてくる', outward:'いい制度だと思いますよ、対象になる人は。', inner:'病院勤務は結局シフトがきつくなるだけでは。', initial:'疎外感。', m1:'事務職だけ使える制度だと感じる。', m6:'不公平感が強まる。', best:'現場人員補充とセットの選択制', bad:'副業推奨型', memo:'現場職には「制度の対象外感」が強く出る。'},
+  {id:'P08', name:'長谷川修', attr:'41歳・教員', stance:'公共職', value:'責任感', emotion:'冷笑', interest:'仕事量が減らない', type:'表向き賛成・内心反対', outward:'働き方改革は必要ですね。', inner:'授業も保護者対応も減らないのに、休みだけ増やせるわけがない。', initial:'冷笑。', m1:'制度のニュースを見ても自分ごと化しない。', m6:'民間だけの話として距離を取る。', best:'業務削減とセットの選択制', bad:'4日×10時間型', memo:'公共職では、勤務日数より仕事量そのものが問題になる。'},
+  {id:'P09', name:'橋本剛', attr:'47歳・中小企業経営者', stance:'経営側', value:'生存', emotion:'強い不安', interest:'人が足りない', type:'不安が強い', outward:'理想は分かるけど、うちでは無理です。', inner:'大企業だけが良い顔をして、人材を奪っていく。', initial:'強い不安。', m1:'採用競争で不利になると感じる。', m6:'大企業との格差感が増える。', best:'段階導入、補助金、業務改善支援つきの選択制', bad:'一律義務化', memo:'中小企業には、制度そのものより移行支援が必要。'},
+  {id:'P10', name:'白石由紀', attr:'56歳・大企業役員', stance:'経営側', value:'採用競争力', emotion:'前向き', interest:'制度設計で差別化したい', type:'条件付きで賛成する', outward:'採用競争力の観点から検討価値があります。', inner:'制度を広報に使えるが、現場が回るかは不安。', initial:'前向き。', m1:'人事制度設計チームを立ち上げる。', m6:'部署間格差が課題になる。', best:'選択制', bad:'給与2割減型を前面に出すこと', memo:'大企業は導入しやすいが、社内の不公平調整が重くなる。'},
+  {id:'P11', name:'安達涼', attr:'33歳・IT専門職', stance:'受け手', value:'副業と自律', emotion:'強い期待', interest:'1日を副業に使いたい', type:'すぐ賛成する', outward:'副業デーがあるならかなり魅力的です。', inner:'会社に縛られず、自分の市場価値を上げたい。', initial:'強い期待。', m1:'個人開発や副業案件を探し始める。', m6:'会社への依存度が下がる。', best:'副業推奨型', bad:'現状維持', memo:'副業推奨型は、優秀層の成長と流出を同時に促す。'},
+  {id:'P12', name:'宮本和代', attr:'60歳・飲食店主', stance:'経営側', value:'現場対応', emotion:'反発', interest:'店は休めない', type:'反発する', outward:'会社員はいいですね。', inner:'店を閉めたら売上が減る。人も雇えない。', initial:'反発。', m1:'制度への距離感が増す。', m6:'会社員優遇と感じる。', best:'小規模事業者向けの人材シェア支援', bad:'週休3日を社会標準として語ること', memo:'自営業者には、制度が「自分たちの外側の話」に見える。'},
+  {id:'P13', name:'中村拓也', attr:'38歳・物流ドライバー', stance:'現場職', value:'実利', emotion:'疑い', interest:'配送量が減らない', type:'不安が強い', outward:'休みが増えるならいいですけどね。', inner:'配送量が同じなら、1日が地獄になるだけ。', initial:'疑い。', m1:'10時間勤務案に不満。', m6:'現場の事故リスクを心配する。', best:'配送量調整つきの選択制', bad:'4日×10時間型', memo:'現場職では、労働時間の圧縮が身体負荷として現れる。'},
+  {id:'P14', name:'西野花', attr:'26歳・若手女性社員', stance:'受け手', value:'余白と安心', emotion:'期待', interest:'休めるなら嬉しいが評価が不安', type:'すぐ賛成する', outward:'推し活や旅行に使えそうで嬉しいです。', inner:'でも使った人から暇そうと思われたら嫌だ。', initial:'期待。', m1:'制度説明を聞くが申請は保留。', m6:'同期が使い始めると安心して使う。', best:'選択制', bad:'上司承認が重い制度', memo:'若手には、制度より「周囲が使っている事実」が効く。'},
+  {id:'P15', name:'久保田真', attr:'44歳・高所得コンサル', stance:'受け手', value:'成果主義', emotion:'条件付き賛成', interest:'成果で測るなら賛成', type:'条件付きで賛成する', outward:'成果が出るなら勤務日は何日でもよいと思います。', inner:'自分は対応できるが、全員に適用するのは難しい。', initial:'条件付き賛成。', m1:'成果評価の明確化を求める。', m6:'制度より評価制度改革に関心が移る。', best:'選択制、副業推奨型', bad:'一律導入', memo:'高裁量層は週休3日制を、成果主義への入口として捉える。'},
+  {id:'P16', name:'山口律子', attr:'50歳・労組担当', stance:'調整役', value:'公平性', emotion:'慎重', interest:'低所得層を守りたい', type:'表向き賛成・内心反対', outward:'選択肢が増えることは良いですが、賃金低下には注意が必要です。', inner:'制度が格差拡大に使われないか警戒している。', initial:'慎重。', m1:'利用条件と評価ルールを確認する。', m6:'低所得層の利用率が低いことを問題視する。', best:'収入維持を基本とする選択制', bad:'給与2割減型', memo:'労使調整では「選択の自由」と「実質的な不利益」の検証が必要。'},
+  {id:'P17', name:'佐藤陽介', attr:'35歳・製造現場リーダー', stance:'現場管理', value:'安全と納期', emotion:'不安', interest:'4日×10時間は事故が怖い', type:'不安が強い', outward:'安全に回るなら反対はしません。', inner:'10時間勤務で集中力が落ちたら事故が増える。', initial:'不安。', m1:'現場シフトの試算を始める。', m6:'疲労管理が制度の中心課題になる。', best:'繁閑差に合わせた選択制', bad:'4日×10時間型', memo:'製造現場では、休日数より安全設計が先に来る。'},
+  {id:'P18', name:'高橋凛', attr:'21歳・学生アルバイト', stance:'周辺層', value:'時間優先', emotion:'無関心', interest:'正社員制度に距離がある', type:'あとから効いてくる', outward:'正社員の話ですよね。', inner:'自分には関係ない。', initial:'無関心。', m1:'バイト先のシフトが変わると少し影響を感じる。', m6:'正社員と非正規の差を意識する。', best:'非正規にも波及する柔軟シフト', bad:'正社員だけの制度', memo:'周辺層は最初は無関心だが、職場運用で後から影響を受ける。'},
+  {id:'P19', name:'青山智子', attr:'34歳・持病あり正社員', stance:'受け手', value:'健康維持', emotion:'切実な期待', interest:'通院・休養に使いたい', type:'条件付きで賛成する', outward:'週に1日、体調を整える日があると助かります。', inner:'休みたいと言うと、弱い人だと思われそう。', initial:'切実な期待。', m1:'通院と休養の計画が立てやすくなる。', m6:'離職不安が下がる。', best:'選択制', bad:'4日×10時間型', memo:'健康事情を持つ人には、制度が離職防止策になる可能性がある。'},
+  {id:'P20', name:'杉田健', attr:'42歳・地方自治体職員', stance:'公共側', value:'制度運用', emotion:'慎重', interest:'住民サービスとの両立が課題', type:'条件付きで賛成する', outward:'住民サービスを維持できるなら検討できます。', inner:'窓口が閉まると苦情が来る。', initial:'慎重。', m1:'交代制の可能性を検討する。', m6:'窓口業務と内部業務で制度差が出る。', best:'部署別の選択制', bad:'一律導入', memo:'公共サービスでは、利用者側の時間設計も同時に考える必要がある。'}
+];
+const distribution = [
+  {type:'すぐ賛成する', n:3, rep:'P01、P11、P14', feature:'自由時間や副業に期待'},
+  {type:'条件付きで賛成する', n:5, rep:'P03、P06、P10、P15、P20', feature:'収入維持・評価公平・業務設計が条件'},
+  {type:'不安が強い', n:4, rep:'P04、P05、P13、P17', feature:'収入、調整負荷、身体負荷を心配'},
+  {type:'表向き賛成・内心反対', n:3, rep:'P05、P08、P16', feature:'制度理念には賛成だが運用を疑う'},
+  {type:'無関心・沈黙', n:2, rep:'P18、P02', feature:'自分には関係ない、または言っても変わらない'},
+  {type:'あとから効いてくる', n:2, rep:'P18、P07', feature:'初期は無関心だが職場差で影響を受ける'},
+  {type:'反発する', n:1, rep:'P12', feature:'会社員中心の制度に疎外感'}
+];
+const noises = [
+  '「休みが増える」と言われても、低所得層には「収入が減る」と聞こえる。',
+  '子育て層は、週の休日数よりも、毎日の退勤時間を重視する。',
+  '介護層や持病のある人は制度を求めているが、評価不利を恐れて表に出にくい。',
+  '若手は自由を求めるが、キャリア序盤で休むことに不安を持つ。',
+  '副業推奨型は、自律を促す一方で「副業できる人」と「できない人」の格差を広げる。',
+  '4日×10時間型は、給与維持で支持されやすいが、平日の疲労と安全リスクが見落とされやすい。',
+  '大企業には採用広報になるが、中小企業には人材流出圧力として見える。',
+  '「選択制」は最も受け入れられやすいが、実際には選べる人と選べない人が分かれる。',
+  '制度導入後、管理職の見えない調整労働が増える。',
+  '現場職は、制度そのものより「自分たちは対象外ではないか」という疎外感に反応する。',
+  '週休3日制は、働き方改革であると同時に、評価制度改革、業務削減、職務設計改革でもある。'
+];
+const nextThemes = [
+  {theme:'週休3日制と所得階層', why:'制度が高所得者向けになる危険があるため', info:'年収帯、家族構成、固定費'},
+  {theme:'週休3日制と管理職負荷', why:'制度の成否は管理職の調整能力に依存するため', info:'会議数、承認フロー、部下人数'},
+  {theme:'週休3日制と現場職の公平感', why:'オフィス職だけが得をする構図を避けるため', info:'職種別適用可能性、シフト制約'},
+  {theme:'週休3日制と副業格差', why:'副業できる人だけが成長する可能性があるため', info:'副業可否、スキル、社内規程'},
+  {theme:'週休3日制と離職防止', why:'育児・介護・健康事情を持つ人の定着に効く可能性があるため', info:'離職理由、通院・介護状況、満足度'}
+];
+function table(headers, rows){
+  return `<thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+function initTabs(){
+  document.querySelectorAll('.tabbar button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      window.scrollTo({top:document.querySelector('nav.tabs').offsetTop, behavior:'smooth'});
+    });
+  });
+}
+function renderScores(){
+  const headers = ['処置','期待度','不安度','信頼度','行動変化','反発度','生活改善感','コメント'];
+  const rows = scores.map(s=>[s.name,s.exp,s.anx,s.trust,s.action,s.react,s.improve,s.comment]);
+  document.getElementById('scoreTable').innerHTML = table(headers, rows);
+  const sorted=[...scores].sort((a,b)=>b.improve-a.improve);
+  document.getElementById('improvementBars').innerHTML = sorted.map(s=>`
+    <div class="barrow"><div class="barlabel">${s.name}</div><div class="bartrack"><div class="bar" style="width:${s.improve}%"></div></div><div class="barval">${s.improve}</div></div>
+  `).join('');
+}
+function renderScatter(){
+  const svg=document.getElementById('scatter');
+  const W=680,H=430, pad=64;
+  const x=v=>pad+(v/100)*(W-pad*1.45);
+  const y=v=>H-pad-(v/100)*(H-pad*1.55);
+  const colors=['#6b6258','#9b2f1f','#b66a21','#7a5c12','#1d5d63'];
+  let out=`
+    <rect x="0" y="0" width="${W}" height="${H}" fill="#fffaf0"/>
+    <line x1="${pad}" y1="${H-pad}" x2="${W-pad/1.7}" y2="${H-pad}" stroke="#8b7d6b" stroke-width="1.5"/>
+    <line x1="${pad}" y1="${pad/1.5}" x2="${pad}" y2="${H-pad}" stroke="#8b7d6b" stroke-width="1.5"/>
+    <line x1="${x(50)}" y1="${pad/1.5}" x2="${x(50)}" y2="${H-pad}" stroke="#d8cbb8" stroke-dasharray="6 6"/>
+    <line x1="${pad}" y1="${y(50)}" x2="${W-pad/1.7}" y2="${y(50)}" stroke="#d8cbb8" stroke-dasharray="6 6"/>
+    <text x="${W/2}" y="${H-18}" text-anchor="middle" font-size="14" fill="#4d463f">期待度 →</text>
+    <text x="20" y="${H/2}" transform="rotate(-90 20 ${H/2})" text-anchor="middle" font-size="14" fill="#4d463f">不安度 →</text>
+    <text x="${x(73)}" y="${y(25)}" font-size="12" fill="#6b6258">期待高・不安低</text>
+    <text x="${x(61)}" y="${y(86)}" font-size="12" fill="#6b6258">期待高・不安高</text>
+  `;
+  scores.forEach((s,i)=>{
+    out+=`<circle cx="${x(s.exp)}" cy="${y(s.anx)}" r="13" fill="${colors[i]}" opacity=".9"><title>${s.name}</title></circle>`;
+    out+=`<text x="${x(s.exp)+17}" y="${y(s.anx)+5}" font-size="13" fill="#1f2430">${s.name}</text>`;
+  });
+  svg.innerHTML=out;
+}
+function renderInterventions(){
+  document.getElementById('interventionTable').innerHTML = table(['処置','狙い','届きやすい層','届きにくい層','想定副作用'], interventions.map(i=>[i.name,i.aim,i.reach,i.miss,i.side]));
+  document.getElementById('interventionCards').innerHTML = interventions.map(i=>`<div class="card"><h3>${i.name}</h3><p><strong>狙い：</strong>${i.aim}</p><p><strong>副作用：</strong>${i.side}</p></div>`).join('');
+}
+function renderPersonas(){
+  const personaGrid=document.getElementById('personaGrid');
+  personaGrid.innerHTML=personas.map(p=>`
+    <article class="persona-card">
+      <h3><span>${p.name}</span><span class="pid">${p.id}</span></h3>
+      <div class="persona-meta">${p.attr}</div>
+      <p><span class="pill">${p.stance}</span><span class="pill">${p.value}</span><span class="pill">${p.emotion}</span></p>
+      <dl>
+        <dt>関心</dt><dd>${p.interest}</dd>
+        <dt>反応タイプ</dt><dd>${p.type}</dd>
+      </dl>
+    </article>
+  `).join('');
+  const logGrid=document.getElementById('logGrid');
+  logGrid.innerHTML=personas.map(p=>`
+    <article class="persona-card">
+      <h3><span>${p.name}</span><span class="pid">${p.id}</span></h3>
+      <div class="persona-meta">${p.attr}｜${p.type}</div>
+      <dl>
+        <dt>表向きの発言</dt><dd>${p.outward}</dd>
+        <dt>内心</dt><dd>${p.inner}</dd>
+        <dt>初期反応</dt><dd>${p.initial}</dd>
+        <dt>1か月後</dt><dd>${p.m1}</dd>
+        <dt>半年後</dt><dd>${p.m6}</dd>
+        <dt>最も効いた処置</dt><dd><span class="pill tag-good">${p.best}</span></dd>
+        <dt>逆効果の処置</dt><dd><span class="pill tag-bad">${p.bad}</span></dd>
+        <dt>観測メモ</dt><dd>${p.memo}</dd>
+      </dl>
+    </article>
+  `).join('');
+}
+function renderDistribution(){
+  document.getElementById('distributionTable').innerHTML = table(['反応タイプ','人数','代表ペルソナ','特徴'], distribution.map(d=>[d.type,d.n,d.rep,d.feature]));
+  const max=Math.max(...distribution.map(d=>d.n));
+  document.getElementById('distributionBars').innerHTML = distribution.map(d=>`
+    <div class="barrow"><div class="barlabel">${d.type}</div><div class="bartrack"><div class="bar warn" style="width:${d.n/max*100}%"></div></div><div class="barval">${d.n}</div></div>
+  `).join('');
+}
+function renderNoise(){
+  document.getElementById('noiseList').innerHTML = noises.map(n=>`<li>${n}</li>`).join('');
+}
+function renderNext(){
+  document.getElementById('nextTable').innerHTML = table(['次回観測テーマ','なぜ測るべきか','必要な追加情報'], nextThemes.map(n=>[n.theme,n.why,n.info]));
+}
+initTabs();
+renderScores();
+renderScatter();
+renderInterventions();
+renderPersonas();
+renderDistribution();
+renderNoise();
+renderNext();
+</script>
+</body>
+</html>
